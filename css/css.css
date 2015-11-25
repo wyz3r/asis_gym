@@ -1,0 +1,8 @@
+
+div a :hover {
+    background-color: #2AD1EB;
+}
+
+li a :active {
+    background-color: #2AD1EB;
+}
