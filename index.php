@@ -262,17 +262,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         <h2>Asistencia</h2>
         <form class="form-inscripcion form-horizontal" action="index.php" method="post">
           <input type="hidden" name="formulario" value="entradasalida">
-        <div class="form-group">
-          <div class="col-md-12">
-            <div class="col-lg-2">
-              <input type="number" class="form-control" name="clave-ulsa" placeholder="Clave Usuario">
+          <div class="form-group">
+            <div class="col-md-12">
+              <div class="col-lg-2">
+                <input type="number" class="form-control" name="clave-ulsa" placeholder="Clave Usuario">
+              </div>
             </div>
-          </div>
-            <input type="button" class="btn btn-default " onclick=checkinCheckout(0)  value="Entrada">
-            <input type="button" class="btn btn-default " onclick=checkinCheckout(1)  value="Salida">
+            <input type="button" class="btn btn-default " onclick=checkinCheckout(0) value="Entrada">
+            <input type="button" class="btn btn-default " onclick=checkinCheckout(1) value="Salida">
 
           </div>
-          <div class="entrada asist"  style="display:none">
+          <div class="entrada asist" style="display:none">
 
 
           </div>
@@ -282,182 +282,211 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 
           </div>
           <div class="col-lg-10 col-lg-offset-2">
-              <button type="reset" class="btn btn-default">Cancel</button>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
+            <button type="reset" class="btn btn-default">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
 
 
-        <!-- Trigger the modal with a button -->
+          <!-- Trigger the modal with a button -->
 
-        <!-- Modal -->
-        <!-- Modal -->
-        <div class="modal fade" id="myModal3" role="dialog">
-          <div class="modal-dialog">
+          <!-- Modal -->
+          <!-- Modal -->
+          <div class="modal fade" id="myModal3" role="dialog">
+            <div class="modal-dialog">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h4 class="modal-title">Picture</h4>
-              </div>
-              <div class="modal-body">
-                <table>
-                  <tr>
-                    <td valign=top>
-                      <h1>Tomate la foto</h1>
-                      <h3>Despues de tomarte la foto cargala.</h3>
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">×</button>
+                  <h4 class="modal-title">Picture</h4>
+                </div>
+                <div class="modal-body">
+                  <table>
+                    <tr>
+                      <td valign=top>
+                        <h1>Tomate la foto</h1>
+                        <h3>Despues de tomarte la foto cargala.</h3>
 
-                      <!-- First, include the JPEGCam JavaScript Library -->
-                      <script type="text/javascript" src="camjs/webcam.js"></script>
+                        <!-- First, include the JPEGCam JavaScript Library -->
+                        <script type="text/javascript" src="camjs/webcam.js"></script>
 
-                      <!-- Configure a few settings -->
-                      <script language="JavaScript">
-                        webcam.set_api_url('camjs/test.php');
-                      //  alert(" path:::"+webcam.set_api_url('camjs/test.php'));
-                        webcam.set_quality(100); // JPEG quality (1 - 100)
+                        <!-- Configure a few settings -->
+                        <script language="JavaScript">
+                          webcam.set_api_url('camjs/test.php');
+                          //  alert(" path:::"+webcam.set_api_url('camjs/test.php'));
+                          webcam.set_quality(100); // JPEG quality (1 - 100)
 
-                        webcam.set_shutter_sound(true); // play shutter click sound
-                      </script>
+                          webcam.set_shutter_sound(true); // play shutter click sound
+                        </script>
 
-                      <!-- Next, write the movie to the page at 320x240 -->
-                      <script language="JavaScript">
-                        document.write(webcam.get_html(320, 240));
-                      </script>
+                        <!-- Next, write the movie to the page at 320x240 -->
+                        <script language="JavaScript">
+                          document.write(webcam.get_html(320, 240));
+                        </script>
 
-                      <!-- Some buttons for controlling things -->
-                      <br/>
-                      <form>
-                        <!--<input type=button value="Configure..." onClick="webcam.configure()">-->
+                        <!-- Some buttons for controlling things -->
+                        <br/>
+                        <form>
+                          <!--<input type=button value="Configure..." onClick="webcam.configure()">-->
 
-                        <input class="btn btn-success" type=button value="Capturar" onClick="webcam.freeze()">
+                          <input class="btn btn-success" type=button value="Capturar" onClick="webcam.freeze()">
 
-                        <input type=button value="Upload" class="btn btn-danger" data-dismiss="modal" onClick="webcam.upload()">
+                          <input type=button value="Upload" class="btn btn-danger" data-dismiss="modal" onClick="webcam.upload()">
 
-                        <input type=button value="Reset" class="btn btn-primary" onClick="webcam.reset()">
-                      </form>
+                          <input type=button value="Reset" class="btn btn-primary" onClick="webcam.reset()">
+                        </form>
 
-                      <!-- Code to handle the server response (see test.php) -->
-                      <script language="JavaScript">
-                        webcam.set_hook('onComplete', 'my_completion_handler');
+                        <!-- Code to handle the server response (see test.php) -->
+                        <script language="JavaScript">
+                          webcam.set_hook('onComplete', 'my_completion_handler');
 
-                        function my_completion_handler(msg) {
-                          // extract URL out of PHP output
-                          if (msg.match(/(http\:\/\/\S+)/)) {
-                            var image_url = RegExp.$1;
+                          function my_completion_handler(msg) {
+                            // extract URL out of PHP output
+                            if (msg.match(/(http\:\/\/\S+)/)) {
+                              var image_url = RegExp.$1;
 
-                            alert('path:'+image_url);//
+                              alert('path:' + image_url); //
 
-                            // show JPEG image in page
-                            document.getElementById('upload_results').innerHTML =
-                              '<h1>Upload Successful!</h1>' +
-                              '<h3>JPEG URL: ' + image_url + '</h3>' +
-                              '<img src="' + image_url + '">';
+                              // show JPEG image in page
+                              document.getElementById('upload_results').innerHTML =
+                                '<h1>Upload Successful!</h1>' +
+                                '<h3>JPEG URL: ' + image_url + '</h3>' +
+                                '<img src="' + image_url + '">';
 
-                            // reset camera for another shot
-                            webcam.reset();
-                          } else alert("PHP Error1: " + msg);
-                        }
-                      </script>
-                      <?php
+                              // reset camera for another shot
+                              webcam.reset();
+                            } else alert("PHP Error1: " + msg);
+                          }
+                        </script>
+                        <?php
                       $path = "<script> document.write(image_url) </script>";
                       echo "variablephp = $path";
                       ?>
-                    </td>
-                    <td width=50></td>
-                    <td valign=top>
-                      <!--<div id="upload_results" style="background-color:#eee;"></div>-->
-                    </td>
-                  </tr>
-                </table>
+                      </td>
+                      <td width=50></td>
+                      <td valign=top>
+                        <!--<div id="upload_results" style="background-color:#eee;"></div>-->
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
 
+            </div>
           </div>
-        </div>
         </form>
       </div>
 
       <div style="align-content: center; display:none" class="div-consulta view">
 
 
-          <h1> Consulta de asistencia usuarios </h1>
-          <div class="col-md-9 col-md-offset-2" style="align-text">
-            <table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
-           <thead>
-             <tr>
-               <th>R</th>
-               <th>Browser</th>
-               <th>Platform(s)</th>
-               <th>Engine version</th>
-               <th>CSS grade</th>
-                <th>CSS grade</th>
-             </tr>
-           </thead>
-
-           <tbody>
-             <tr class="gradeX">
-               <td>Trident</td>
-               <td>Trident</td>
-               <td>Internet
-                  Explorer 4.0</td>
-               <td>Win 95+</td>
-               <td class="center">4</td>
-               <td class="center">X</td>
-             </tr>
-             <tr class="gradeC">
-               <td>Trident</td>
-               <td>Trident</td>
-               <td>Internet
-                  Explorer 5.0</td>
-               <td>Win 95+</td>
-               <td class="center">5</td>
-               <td class="center">C</td>
-             </tr>
-             <tr class="gradeA">
-               <td>Trident</td>
-               <td>Trident</td>
-               <td>Internet
-                  Explorer 5.5</td>
-               <td>Win 95+</td>
-               <td class="center">5.5</td>
-               <td class="center">A</td>
-             </tr>
-             <tr class="gradeA">
-               <td>Trident</td>
-               <td>Trident</td>
-               <td>Internet
-                  Explorer 6</td>
-               <td>Win 98+</td>
-               <td class="center">6</td>
-               <td class="center">A</td>
-             </tr>
+        <h1> Consulta de asistencia usuarios </h1>
+        <div class="col-md-12" style="align-text">
+          <table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+            <thead>
+              <tr>
+                <th>Clave Ulsa </th>
+                <th>Sexo</th>
+                <th>Nombre</th>
+                <th>apellido Paterno</th>
+                <th>apellido Paterno</th>
+                <th>Fecha de naciemiento </th>
+                <th>tipo </th>
+                <th>carrera </th>
+                <th>Entradas </th>
+                <th>Entradas </th>
+                <th>Entradas </th>
+                Hora_Salida, photo
+              </tr>
+            </thead>
 
 
-             <tr class="gradeA">
-               <td>Gecko</td>
-               <td>Trident</td>
-               <td>Mozilla 1.5</td>
-               <td>Win 95+ / OSX.1+</td>
-               <td class="center">1.5</td>
-               <td class="center">A</td>
-             </tr>
-           </tbody>
-         </table>
+            <tbody>
+              <!--
+              <tr class="gradeX">
+                <td>11300</td>
+                <td>masculino</td>
+                <td>leo</td>
+                <td>islas</td>
+                <td>gonzalez</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Internet Explorer 4.0</td>
+                <td>Win 95+</td>
+                <td class="center">4</td>
+                <td class="center">X</td>
+              </tr>
+              <tr class="gradeC">
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Internet Explorer 5.0</td>
+                <td>Win 95+</td>
+                <td class="center">5</td>
+                <td class="center">C</td>
+              </tr>
+              <tr class="gradeA">
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Internet Explorer 5.5</td>
+                <td>Win 95+</td>
+                <td class="center">5.5</td>
+                <td class="center">A</td>
+              </tr>
+              <tr class="gradeA">
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Internet Explorer 6</td>
+                <td>Win 98+</td>
+                <td class="center">6</td>
+                <td class="center">A</td>
+              </tr>
 
-          </div>
 
-          <?php
+              <tr class="gradeA">
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Trident</td>
+                <td>Gecko</td>
+                <td>Trident</td>
+                <td>Mozilla 1.5</td>
+                <td>Win 95+ / OSX.1+</td>
+                <td class="center">1.5</td>
+                <td class="center">A</td>
+              </tr>
+              -->
+
+
+
+        <?php
           $sql = "SELECT cve_ulsa, Sexo, Nombre, apellido_paterno, apellido_materno, fecha_nac, tipo, Carrera, Hora_Entrada, Hora_Salida, photo FROM vista_asistencia";
                 $result = $conexion->query($sql);
 
                 if ($result->num_rows > 0) {
                   // output data of each row
                   while($row = $result->fetch_assoc()) {
-                    echo "". $row['cve_ulsa']. $row['Sexo']. $row['Nombre']. $row['apellido_paterno']. $row['apellido_materno']. $row['fecha_nac']. $row['tipo']. $row['Carrera']. $row['Hora_Entrada']. $row['Hora_Salida'].
-                    $row['photo'];
+                    echo "<tr>"."<td>". $row['cve_ulsa']."</td>"."<td>". $row['Sexo']."</td>"."<td>". $row['Nombre']."</td>"."<td>". $row['apellido_paterno']."</td>"."<td>". $row['apellido_materno']."</td>"."<td>".
+                     $row['fecha_nac']."</td>"."<td>". $row['tipo']."</td>"."<td>". $row['Carrera']."</td>"."<td>". $row['Hora_Entrada']."</td>"."<td>".
+                      $row['Hora_Salida']."</td>"."<td>".$row['photo']."</td>"."</tr>";
 
                   }//echo "<option value=\"".$row['cve_carrera']."\">".$row['name']."</option>"
                   } else {
@@ -465,12 +494,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                   }
 
               ?>
+                </tbody>
+            </table>
+          </div>
 
       </div>
 
       <div style="align-content: center; display:none" class="div-eliminar view">
         <form class="form-inscripcion form-horizontal" action="index.php" method="post">
-          <input  name="formulario" value="eliminarUsuario">
+          <input name="formulario" value="eliminarUsuario">
           <h1> Eliminar usuario </h1>
           <div class="form-group">
             <label class="col-md-4 control-label">Clave de usuario a eliminar</label>
@@ -487,62 +519,60 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         </form>
 
       </div>
-       <div style="align-content: center; display: none" class="div-mod-usuario view">
-          <form class="form-inscripcion form-horizontal" action="index.php" method="post">
-                        <input type="hidden" name="formulario" value="modificarusuario">
-                        <h1> Modificar usuario </h1>
-                        <div class="form-group">
-                    <label  class="col-md-4 control-label">Clave de usuario a eliminar</label>
-                    <div class="col-lg-4">
-                      <input type="text" class="form-control" name="usuarioamodificar"id="" placeholder="Usuario a modificar">
-                       </div>
-                      </div>
-                       <div class="form-group">
-                    <div class="form-group">
-                    <label  class="col-md-4 control-label">Nombre</label>
-                    <div class="col-lg-4">
-                      <input type="text" class="form-control" name="nombre"  id="" placeholder="Nombre">
-                    </div>
-                  </div>
+      <div style="align-content: center; display: none" class="div-mod-usuario view">
+        <form class="form-inscripcion form-horizontal" action="index.php" method="post">
+          <input type="hidden" name="formulario" value="modificarusuario">
+          <h1> Modificar usuario </h1>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Clave de usuario a eliminar</label>
+            <div class="col-lg-4">
+              <input type="text" class="form-control" name="usuarioamodificar" id="" placeholder="Usuario a modificar">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-group">
+              <label class="col-md-4 control-label">Nombre</label>
+              <div class="col-lg-4">
+                <input type="text" class="form-control" name="nombre" id="" placeholder="Nombre">
+              </div>
+            </div>
 
-                  <div class="form-group">
-                    <label  class="col-md-4 control-label">Apellido Paterno</label>
-                    <div class="col-lg-4">
-                      <input type="text" class="form-control" name="apellido-paterno"id="" placeholder="Apellido Paterno">
-                    </div>
-                  </div>
+            <div class="form-group">
+              <label class="col-md-4 control-label">Apellido Paterno</label>
+              <div class="col-lg-4">
+                <input type="text" class="form-control" name="apellido-paterno" id="" placeholder="Apellido Paterno">
+              </div>
+            </div>
 
-                  <div class="form-group">
-                    <label  class="col-md-4 control-label">Apellido Materno</label>
-                    <div class="col-lg-4">
-                      <input type="text" class="form-control" name="apellido-materno"id="" placeholder="Apellido Materno">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-lg-4 control-label">Sexo</label>
-                    <div class="col-lg-2">
-                      <div class="radio">
-                        <label>
-                          <input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked="">
-                          Masculino
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <label>
-                          <input type="radio" name="optionsRadios" id="optionsRadios2" value="2">
-                          Femenino
-                          </label>
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-                      <label>fecha Nacimiento</label>
-                      <input type="date"  name="fecha" value="">
-                    </div>
-                  </div>
-                    <div class="col-lg-2 col-md-offset-2">
-                      <select class="form-control" name="tipo">
-                        <option value="">Tipo</option>
-                        <?php
+            <div class="form-group">
+              <label class="col-md-4 control-label">Apellido Materno</label>
+              <div class="col-lg-4">
+                <input type="text" class="form-control" name="apellido-materno" id="" placeholder="Apellido Materno">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-4 control-label">Sexo</label>
+              <div class="col-lg-2">
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked=""> Masculino
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="2"> Femenino
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <label>fecha Nacimiento</label>
+                <input type="date" name="fecha" value="">
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-offset-2">
+              <select class="form-control" name="tipo">
+                <option value="">Tipo</option>
+                <?php
                         $sql = "SELECT cve_tipo,name FROM `Tipo` WHERE 1";
 
                               $result = $conexion->query($sql);
@@ -556,12 +586,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                                   echo "0 results";
                                 }
                          ?>
-                      </select>
-                    </div>
-                    <div class="col-lg-2">
-                      <select class="form-control" id="carrera" name="carrera">
-                        <option value=" ">Carrera</option>
-                        <?php
+              </select>
+            </div>
+            <div class="col-lg-2">
+              <select class="form-control" id="carrera" name="carrera">
+                <option value=" ">Carrera</option>
+                <?php
                         $sql = "SELECT `cve_carrera`, `name` FROM `Carrera` WHERE 1";
                               $result = $conexion->query($sql);
 
@@ -574,12 +604,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                                   echo "0 results";
                                 }
                          ?>
-                      </select>
-                    </div>
-                    <div class="col-lg-2">
-                      <select class="form-control" id="campus" name="campus">
-                        <option>campus</option>
-                        <?php
+              </select>
+            </div>
+            <div class="col-lg-2">
+              <select class="form-control" id="campus" name="campus">
+                <option>campus</option>
+                <?php
                         $sql = "SELECT `cve_campus`, `nombre` FROM `campus` WHERE 1";
                               $result = $conexion->query($sql);
 
@@ -592,16 +622,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                                   echo "0 results";
                                 }
                          ?>
-                      </select>
-                    </div>
-                  </div>
-                      <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-2">
-                      <button type="reset" class="btn btn-default">Cancel</button>
-                      <button type="submit" class="btn btn-primary">Modificar</button>
-                    </div>
-                  </div>
-          </form>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+              <button type="reset" class="btn btn-default">Cancel</button>
+              <button type="submit" class="btn btn-primary">Modificar</button>
+            </div>
+          </div>
+        </form>
 
       </div>
   </body>
@@ -624,21 +654,22 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 
   </body>
   <script type="text/javascript" charset="utf-8">
-   $(document).ready(function() {
-     $('#example').dataTable( {
-       "bPaginate": true,
-       "bLengthChange": true,
-       "bFilter": true,
-       "bSort": true,
-       "bInfo": true,
-       "bAutoWidth": false } );
-   } );
+    $(document).ready(function() {
+      $('#example').dataTable({
+        "bPaginate": true,
+        "bLengthChange": true,
+        "bFilter": true,
+        "bSort": true,
+        "bInfo": true,
+        "bAutoWidth": false
+      });
+    });
   </script>
   <script type="text/javascript" charset="utf-8">
- $(document).ready(function() {
-   $('#example').dataTable();
- } );
-</script>
+    $(document).ready(function() {
+      $('#example').dataTable();
+    });
+  </script>
 
   <script>
     function hint(num) {
@@ -655,7 +686,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 
       }
     }
-    function checkinCheckout(num){
+
+    function checkinCheckout(num) {
       if (num === 0) {
         document.getElementsByClassName('asist')[0].style.display = 'block';
         document.getElementsByClassName('asist')[1].style.display = 'none';
