@@ -1,4 +1,5 @@
 <?php
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -10,19 +11,21 @@ if ($conexion->connect_error)
 {
   die("Connection failed: " . $conexion->connect_error);
 }
+
 if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
   //INGRESAR USUARIO
   if (($_POST['formulario']=='altausuario'))
-  {
+  {echo "carrer==".$_POST['carrera'];
 
-    $stmt =$conexion->prepare("INSERT INTO usuarios(name, apellido_paterno, apellido_materno, cve_ulsa, cve_sexo, fecha_nac, cve_tipo, cve_carrera, cve_campus) VALUES (?,?,?,?,?,?,?,?,?)");
+    $stmt =$conexion->prepare("INSERT INTO Persona(name, apellido_paterno, apellido_materno, cve_ulsa, cve_sexo, fecha_nac, cve_tipo, cve_carrera, cve_campus) VALUES (?,?,?,?,?,?,?,?,?)");
+
     $stmt->bind_param("sssssssss",$nombre,$apellidoPaterno,$apellidoMaterno,$clave,$sexo,$fnac,$tipo,$carrera,$campus);
     $nombre=$_POST['nombre'];
     $apellidoPaterno=$_POST['apellido-paterno'];
     $apellidoMaterno=$_POST['apellido-materno'];
     $clave=$_POST['clave-ulsa'];
-    $sexo=$_POST['optradio'];
+    $sexo=$_POST['optionsRadios'];
     $fnac=$_POST['fecha'];
     $tipo=$_POST['tipo'];
     $carrera=$_POST['carrera'];
@@ -31,20 +34,43 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     $stmt->execute();
   }
   //ELIMINAR USUARIO
-  /*if (($_POST['formulario']=='eliminarusuario'))
+  if (($_POST['formulario']=='eliminarUsuario'))
   {
     $stmt = $conexion->prepare("Delete from Persona where cve_ulsa=?");
     $stmt -> bind_param("s", $clave);
     $clave=$_POST['usuarioaeliminar'];
     $stmt->execute();
   }
+  //UPDATE USUARIO
   if (($_POST['formulario']=='modificarusuario'))
   {
-    $stmt = $conexion->prepare("Delete from Persona where cve_ulsa=?");
-    $stmt -> bind_param("s", $clave);
-    $clave=$_POST['usuarioaeliminar'];
+    $stmt = $conexion->prepare("UPDATE `Persona` SET `cve_sexo`= ?,`name`=?,`apellido_paterno`= ?,`apellido_materno`=?,`fecha_nac`=?,`cve_tipo`=?,`cve_carrera`=?,`cve_campus`=? WHERE 'cve_ulsa'=?");
+    $stmt -> bind_param("sssssssss", $sexo, $nombre, $apellidoPaterno, $apellidoMaterno, $fnac, $tipo, $carrera, $campus, $clave);
+    $nombre=$_POST['nombre'];
+    $apellidoPaterno=$_POST['apellido-paterno'];
+    $apellidoMaterno=$_POST['apellido-materno'];
+    $sexo=$_POST['optionsRadios'];
+    $fnac=$_POST['fecha'];
+    $tipo=$_POST['tipo'];
+    $carrera=$_POST['carrera'];
+    $campus=$_POST['campus'];
+    $clave=$_POST['usuarioamodificar'];
+    $stmt->execute();
+    echo "". nombre.apellidoPaterno.apellidoMaterno.sexo.fnac.tipo.carrera.campus.clave;
+  }
+  /*
+  if (($_POST['formulario']=='entradasalida'))
+  {
+    $path = "<script> document.write(image_url) </script>";
+                      echo "variablephp = ".$path;
+    /*
+    $stmt = $conexion->prepare("INSERT INTO Asistencia(cve_ulsa,checkin) values(?,?)");
+    $stmt -> bind_param("ss", $cve_ulsa, $checkin);
+    $cve_ulsa=$_POST['clave_ulsa'];
+    $checkin=$_POST['fecha'];
     $stmt->execute();
   }*/
+
 }
 ?>
 
@@ -54,8 +80,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     <script src="Jquery/jquery-2.1.4.min.js"></script>
     <link href="bootstrap-3.3.5-dist/css/bootstrapjurney.min.css" rel="stylesheet">
     <script src="bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="datajs/jquery.dataTables.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="datacss/jquery.dataTables.min.css">
+
+
     <link href="css/css.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/menu.css">
+
+
+
+
 
 
 
@@ -95,12 +130,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
               </ul>
             </li>
           </ul>
-          <form class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="Search">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-          </form>
         </div>
       </div>
     </nav>
@@ -231,14 +260,34 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 
       <div class="view div-asistencia" style="display:none">
         <h2>Asistencia</h2>
+        <form class="form-inscripcion form-horizontal" action="index.php" method="post">
+          <input type="hidden" name="formulario" value="entradasalida">
         <div class="form-group">
-          <label class="col-lg-4 control-label">Clave Ulsa</label>
-          <div class="col-lg-2">
-            <input type="number" class="form-control" name="clave-ulsa" placeholder="Clave Usuario">
+          <div class="col-md-12">
+            <div class="col-lg-2">
+              <input type="number" class="form-control" name="clave-ulsa" placeholder="Clave Usuario">
+            </div>
           </div>
-        </div>
+            <input type="button" class="btn btn-default " onclick=checkinCheckout(0)  value="Entrada">
+            <input type="button" class="btn btn-default " onclick=checkinCheckout(1)  value="Salida">
+
+          </div>
+          <div class="entrada asist"  style="display:none">
+
+
+          </div>
+          <div class="salida asist" style="display:none">
+
+            <button id="static" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">¡Tomate foto de Salida!</button>
+
+          </div>
+          <div class="col-lg-10 col-lg-offset-2">
+              <button type="reset" class="btn btn-default">Cancel</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+
         <!-- Trigger the modal with a button -->
-        <button id="static" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Tomar Pic</button>
 
         <!-- Modal -->
         <!-- Modal -->
@@ -264,6 +313,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                       <!-- Configure a few settings -->
                       <script language="JavaScript">
                         webcam.set_api_url('camjs/test.php');
+                      //  alert(" path:::"+webcam.set_api_url('camjs/test.php'));
                         webcam.set_quality(100); // JPEG quality (1 - 100)
 
                         webcam.set_shutter_sound(true); // play shutter click sound
@@ -295,7 +345,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                           if (msg.match(/(http\:\/\/\S+)/)) {
                             var image_url = RegExp.$1;
 
-                            alert(image_url);
+                            alert('path:'+image_url);//
 
                             // show JPEG image in page
                             document.getElementById('upload_results').innerHTML =
@@ -308,7 +358,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                           } else alert("PHP Error1: " + msg);
                         }
                       </script>
-
+                      <?php
+                      $path = "<script> document.write(image_url) </script>";
+                      echo "variablephp = $path";
+                      ?>
                     </td>
                     <td width=50></td>
                     <td valign=top>
@@ -324,34 +377,100 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 
           </div>
         </div>
-      </div>
-
-      <div style="align-content: center; display:none" class="div-consulta view">
-        <form class="form-inscripcion form-horizontal" action="index.html" method="post">
-          <input type="hidden" name="formulario" value="consultausuario">
-          <h1> Consulta de asistencia usuarios </h1>
-          <?php
-                $sql="SELECT cve_ulsa, count(*) as total from Asistencia where Hora_Salida != NULL group by cve_ulsa;";
-                $result = mysqli_query($conexion, $sql);
-
-                if (mysqli_num_rows($result) > 0)
-                {
-                while($row = mysqli_fetch_assoc($result))
-                {
-                    echo "Usuario: " . $row["cve_ulsa"]. " - " . $row["total"] . "<br>";
-                }
-                }
-                else
-                {
-                    echo "0 results";
-                }
-              ?>
         </form>
       </div>
 
+      <div style="align-content: center; display:none" class="div-consulta view">
+
+
+          <h1> Consulta de asistencia usuarios </h1>
+          <div class="col-md-9 col-md-offset-2" style="align-text">
+            <table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+           <thead>
+             <tr>
+               <th>R</th>
+               <th>Browser</th>
+               <th>Platform(s)</th>
+               <th>Engine version</th>
+               <th>CSS grade</th>
+                <th>CSS grade</th>
+             </tr>
+           </thead>
+
+           <tbody>
+             <tr class="gradeX">
+               <td>Trident</td>
+               <td>Trident</td>
+               <td>Internet
+                  Explorer 4.0</td>
+               <td>Win 95+</td>
+               <td class="center">4</td>
+               <td class="center">X</td>
+             </tr>
+             <tr class="gradeC">
+               <td>Trident</td>
+               <td>Trident</td>
+               <td>Internet
+                  Explorer 5.0</td>
+               <td>Win 95+</td>
+               <td class="center">5</td>
+               <td class="center">C</td>
+             </tr>
+             <tr class="gradeA">
+               <td>Trident</td>
+               <td>Trident</td>
+               <td>Internet
+                  Explorer 5.5</td>
+               <td>Win 95+</td>
+               <td class="center">5.5</td>
+               <td class="center">A</td>
+             </tr>
+             <tr class="gradeA">
+               <td>Trident</td>
+               <td>Trident</td>
+               <td>Internet
+                  Explorer 6</td>
+               <td>Win 98+</td>
+               <td class="center">6</td>
+               <td class="center">A</td>
+             </tr>
+
+
+             <tr class="gradeA">
+               <td>Gecko</td>
+               <td>Trident</td>
+               <td>Mozilla 1.5</td>
+               <td>Win 95+ / OSX.1+</td>
+               <td class="center">1.5</td>
+               <td class="center">A</td>
+             </tr>
+           </tbody>
+         </table>
+
+          </div>
+
+          <?php
+          $sql = "SELECT cve_ulsa, Sexo, Nombre, apellido_paterno, apellido_materno, fecha_nac, tipo, Carrera, Hora_Entrada, Hora_Salida, photo FROM vista_asistencia";
+                $result = $conexion->query($sql);
+
+                if ($result->num_rows > 0) {
+                  // output data of each row
+                  while($row = $result->fetch_assoc()) {
+                    echo "". $row['cve_ulsa']. $row['Sexo']. $row['Nombre']. $row['apellido_paterno']. $row['apellido_materno']. $row['fecha_nac']. $row['tipo']. $row['Carrera']. $row['Hora_Entrada']. $row['Hora_Salida'].
+                    $row['photo'];
+
+                  }//echo "<option value=\"".$row['cve_carrera']."\">".$row['name']."</option>"
+                  } else {
+                    echo "0 results";
+                  }
+
+              ?>
+
+      </div>
+
       <div style="align-content: center; display:none" class="div-eliminar view">
-        <form class="form-inscripcion form-horizontal" action="index.html" method="post">
-          <input type="hidden" name="formulario" value="eliminarusuario">
+        <form class="form-inscripcion form-horizontal" action="index.php" method="post">
+          <input  name="formulario" value="eliminarUsuario">
           <h1> Eliminar usuario </h1>
           <div class="form-group">
             <label class="col-md-4 control-label">Clave de usuario a eliminar</label>
@@ -368,23 +487,121 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         </form>
 
       </div>
-      <div style="align-content: center; display:none" class="div-mod-usuario view">
-        <form class="form-inscripcion form-horizontal" action="index.html" method="post">
-          <input type="hidden" name="formulario" value="modificarusuario">
-          <h1> Modificar usuario </h1>
-          <div class="form-group">
-            <label class="col-md-4 control-label">Clave de usuario a eliminar</label>
-            <div class="col-lg-4">
-              <input type="text" class="form-control" name="usuarioamodificar" id="" placeholder="Usuario a modificar">
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-lg-10 col-lg-offset-2">
-              <button type="reset" class="btn btn-default">Cancel</button>
-              <button type="submit" class="btn btn-primary">Modificar</button>
-            </div>
-          </div>
-        </form>
+       <div style="align-content: center; display: none" class="div-mod-usuario view">
+          <form class="form-inscripcion form-horizontal" action="index.php" method="post">
+                        <input type="hidden" name="formulario" value="modificarusuario">
+                        <h1> Modificar usuario </h1>
+                        <div class="form-group">
+                    <label  class="col-md-4 control-label">Clave de usuario a eliminar</label>
+                    <div class="col-lg-4">
+                      <input type="text" class="form-control" name="usuarioamodificar"id="" placeholder="Usuario a modificar">
+                       </div>
+                      </div>
+                       <div class="form-group">
+                    <div class="form-group">
+                    <label  class="col-md-4 control-label">Nombre</label>
+                    <div class="col-lg-4">
+                      <input type="text" class="form-control" name="nombre"  id="" placeholder="Nombre">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label  class="col-md-4 control-label">Apellido Paterno</label>
+                    <div class="col-lg-4">
+                      <input type="text" class="form-control" name="apellido-paterno"id="" placeholder="Apellido Paterno">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label  class="col-md-4 control-label">Apellido Materno</label>
+                    <div class="col-lg-4">
+                      <input type="text" class="form-control" name="apellido-materno"id="" placeholder="Apellido Materno">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-lg-4 control-label">Sexo</label>
+                    <div class="col-lg-2">
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked="">
+                          Masculino
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="optionsRadios" id="optionsRadios2" value="2">
+                          Femenino
+                          </label>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <label>fecha Nacimiento</label>
+                      <input type="date"  name="fecha" value="">
+                    </div>
+                  </div>
+                    <div class="col-lg-2 col-md-offset-2">
+                      <select class="form-control" name="tipo">
+                        <option value="">Tipo</option>
+                        <?php
+                        $sql = "SELECT cve_tipo,name FROM `Tipo` WHERE 1";
+
+                              $result = $conexion->query($sql);
+
+                              if ($result->num_rows > 0) {
+                                // output data of each row
+                                while($row = $result->fetch_assoc()) {
+                                  echo "<option value= \"". $row['cve_tipo']."\">".$row['name']."</option>";
+                                }//echo "<option value=\"".$row['cve_carrera']."\">".$row['name']."</option>"
+                                } else {
+                                  echo "0 results";
+                                }
+                         ?>
+                      </select>
+                    </div>
+                    <div class="col-lg-2">
+                      <select class="form-control" id="carrera" name="carrera">
+                        <option value=" ">Carrera</option>
+                        <?php
+                        $sql = "SELECT `cve_carrera`, `name` FROM `Carrera` WHERE 1";
+                              $result = $conexion->query($sql);
+
+                              if ($result->num_rows > 0) {
+                                // output data of each row
+                                while($row = $result->fetch_assoc()) {
+                                  echo "<option value= \"". $row['cve_carrera']."\">".utf8_encode ($row['name'])."</option>";
+                                }//echo "<option value=\"".$row['cve_carrera']."\">".$row['name']."</option>"
+                                } else {
+                                  echo "0 results";
+                                }
+                         ?>
+                      </select>
+                    </div>
+                    <div class="col-lg-2">
+                      <select class="form-control" id="campus" name="campus">
+                        <option>campus</option>
+                        <?php
+                        $sql = "SELECT `cve_campus`, `nombre` FROM `campus` WHERE 1";
+                              $result = $conexion->query($sql);
+
+                              if ($result->num_rows > 0) {
+                                // output data of each row
+                                while($row = $result->fetch_assoc()) {
+                                  echo "<option value= \"". $row['cve_campus']."\">".utf8_encode ($row['nombre'])."</option>";
+                                }//echo "<option value=\"".$row['cve_carrera']."\">".$row['name']."</option>"
+                                } else {
+                                  echo "0 results";
+                                }
+                         ?>
+                      </select>
+                    </div>
+                  </div>
+                      <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="reset" class="btn btn-default">Cancel</button>
+                      <button type="submit" class="btn btn-primary">Modificar</button>
+                    </div>
+                  </div>
+          </form>
 
       </div>
   </body>
@@ -406,6 +623,22 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 
 
   </body>
+  <script type="text/javascript" charset="utf-8">
+   $(document).ready(function() {
+     $('#example').dataTable( {
+       "bPaginate": true,
+       "bLengthChange": true,
+       "bFilter": true,
+       "bSort": true,
+       "bInfo": true,
+       "bAutoWidth": false } );
+   } );
+  </script>
+  <script type="text/javascript" charset="utf-8">
+ $(document).ready(function() {
+   $('#example').dataTable();
+ } );
+</script>
 
   <script>
     function hint(num) {
@@ -417,9 +650,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         } else {
           document.getElementsByClassName('view')[x].style.display = 'none';
         }
+        document.getElementsByClassName('asist')[0].style.display = 'none';
+        document.getElementsByClassName('asist')[1].style.display = 'none';
 
       }
+    }
+    function checkinCheckout(num){
+      if (num === 0) {
+        document.getElementsByClassName('asist')[0].style.display = 'block';
+        document.getElementsByClassName('asist')[1].style.display = 'none';
+      } else {
+        document.getElementsByClassName('asist')[1].style.display = 'block';
+        document.getElementsByClassName('asist')[0].style.display = 'none';
 
+      }
 
     }
   </script>
