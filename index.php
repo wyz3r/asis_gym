@@ -58,6 +58,28 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     $stmt->execute();
     echo "". nombre.apellidoPaterno.apellidoMaterno.sexo.fnac.tipo.carrera.campus.clave;
   }
+  if (($_POST['formulario']=='entradasalida'))
+ {
+ $path = "<script> document.write(image_url) </script>";
+ echo "variablephp = ".$path;
+ echo "si llega".$_POST['botonentrada'].$path;
+ if(($_POST['botonentrada']=='Entrada'))
+ {
+ $stmt = $conexion->prepare("INSERT INTO Asistencia(cve_ulsa,checkin) values(?,?)");
+ $stmt -> bind_param("ss", $cve_ulsa, $checkin);
+ $cve_ulsa=$_POST['clave-ulsa'];
+ $checkin = date("Y-m-d");
+ $stmt->execute();
+ }
+ if(($_POST['botonentrada']=='Upload'))
+ {
+ $cve_ulsa=$_POST['clave-ulsa'];
+ $last_register=mysql_query("SELECT MAX(cve_asistencia) FROM Asistencia WHERE cve_ulsa=".$cve_ulsa.";") or die ( mysql_error() );
+ $stmt = $conexion->prepare("UPDATE Asistencia set photo=?, Hora_Salida=CURRENT_TIMESTAMP where ");
+ $stmt -> bind_param("s", $path);
+ $cve_ulsa=$_POST['clave-ulsa'];
+ $stmt->execute();
+ }
   /*
   if (($_POST['formulario']=='entradasalida'))
   {
