@@ -58,11 +58,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     $stmt->execute();
     echo "". nombre.apellidoPaterno.apellidoMaterno.sexo.fnac.tipo.carrera.campus.clave;
   }
+
+
   if (($_POST['formulario']=='entradasalida'))
  {
- $path = "<script> document.write(image_url) </script>";
- echo "variablephp = ".$path;
- echo "si llega".$_POST['botonentrada'].$path;
+
  if(($_POST['botonentrada']=='Entrada'))
  {
  $stmt = $conexion->prepare("INSERT INTO Asistencia(cve_ulsa,checkin) values(?,?)");
@@ -80,20 +80,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
  $cve_ulsa=$_POST['clave-ulsa'];
  $stmt->execute();
  }
-  /*
-  if (($_POST['formulario']=='entradasalida'))
-  {
-    $path = "<script> document.write(image_url) </script>";
-                      echo "variablephp = ".$path;
-    /*
-    $stmt = $conexion->prepare("INSERT INTO Asistencia(cve_ulsa,checkin) values(?,?)");
-    $stmt -> bind_param("ss", $cve_ulsa, $checkin);
-    $cve_ulsa=$_POST['clave_ulsa'];
-    $checkin=$_POST['fecha'];
-    $stmt->execute();
-  }*/
 
 }
+}
+
 ?>
 
   <html>
@@ -103,26 +93,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     <link href="bootstrap-3.3.5-dist/css/bootstrapjurney.min.css" rel="stylesheet">
     <script src="bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" language="javascript" src="datajs/jquery.dataTables.js"></script>
-
     <link rel="stylesheet" type="text/css" href="datacss/jquery.dataTables.min.css">
-
+    <link rel="stylesheet" type="text/css" href="css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="css/hover-min.css">
 
     <link href="css/css.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/menu.css">
-
-
-
-
-
-
-
     <meta charset="UTF-8">
   </head>
 
   <body>
     <div class="" style="align:center">
       <IMG SRC="imagenes/descargas-1v2_IMAGOTIPO_MEX_LASALLE_OFICIAL_mcolor.png" WIDTH=378 HEIGHT=150>
-
     </div>
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
@@ -133,12 +115,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" onclick=hint(0) href="#">Inscripción</a>
+          <a class="navbar-brand animated bounce" onclick=hint(0) href="#">Inscripción</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
           <ul class="nav navbar-nav">
-            <li><a onclick=hint(1) href="#">Asistencia</a></li>
+            <li class=" hvr-bounce-in"><a onclick=hint(1) href="#">Asistencia</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
@@ -290,8 +272,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                 <input type="number" class="form-control" name="clave-ulsa" placeholder="Clave Usuario">
               </div>
             </div>
-            <input type="button" class="btn btn-default " onclick=checkinCheckout(0) value="Entrada">
-            <input type="button" class="btn btn-default " onclick=checkinCheckout(1) value="Salida">
+            <input type="submit" name="botonentrada" class="btn btn-default " onclick=checkinCheckout(0) value="Entrada">
+            <input type="button" name="botonentrada" class="btn btn-default " onclick=checkinCheckout(1) value="Salida">
 
           </div>
           <div class="entrada asist" style="display:none">
@@ -303,10 +285,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
             <button id="static" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">¡Tomate foto de Salida!</button>
 
           </div>
-          <div class="col-lg-10 col-lg-offset-2">
-            <button type="reset" class="btn btn-default">Cancel</button>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
+
 
 
           <!-- Trigger the modal with a button -->
@@ -427,79 +406,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 
 
             <tbody>
-              <!--
-              <tr class="gradeX">
-                <td>11300</td>
-                <td>masculino</td>
-                <td>leo</td>
-                <td>islas</td>
-                <td>gonzalez</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Internet Explorer 4.0</td>
-                <td>Win 95+</td>
-                <td class="center">4</td>
-                <td class="center">X</td>
-              </tr>
-              <tr class="gradeC">
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Internet Explorer 5.0</td>
-                <td>Win 95+</td>
-                <td class="center">5</td>
-                <td class="center">C</td>
-              </tr>
-              <tr class="gradeA">
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Internet Explorer 5.5</td>
-                <td>Win 95+</td>
-                <td class="center">5.5</td>
-                <td class="center">A</td>
-              </tr>
-              <tr class="gradeA">
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Internet Explorer 6</td>
-                <td>Win 98+</td>
-                <td class="center">6</td>
-                <td class="center">A</td>
-              </tr>
 
 
-              <tr class="gradeA">
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Trident</td>
-                <td>Gecko</td>
-                <td>Trident</td>
-                <td>Mozilla 1.5</td>
-                <td>Win 95+ / OSX.1+</td>
-                <td class="center">1.5</td>
-                <td class="center">A</td>
-              </tr>
-              -->
-
-
-
-        <?php
+              <?php
           $sql = "SELECT cve_ulsa, Sexo, Nombre, apellido_paterno, apellido_materno, fecha_nac, tipo, Carrera, Hora_Entrada, Hora_Salida, photo FROM vista_asistencia";
                 $result = $conexion->query($sql);
 
@@ -516,9 +425,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                   }
 
               ?>
-                </tbody>
-            </table>
-          </div>
+            </tbody>
+          </table>
+        </div>
 
       </div>
 
